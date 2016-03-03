@@ -1,0 +1,28 @@
+﻿@model Prompt
+@{
+    ViewBag.Title = Model.Title;
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - 龙江银行</title>
+    <link href="~/styles/main.css" rel="stylesheet" type="text/css" />
+</head>
+<body style="background-image:none;background-color:#2a3b52">
+    <div class="info">
+        <h2>@Model.Title</h2>
+        <p>@Model.Details</p>
+        <p style="margin-top:30px;">
+            <a class="btn inverse" href="@Context.Request.Headers["Referer"].ToString()">返回上一页</a>
+            <a class="btn" href="/">返回首页</a>
+        </p>
+    </div>
+    <div class="footer">
+        Copyright © 2016 Code Comb Technology Co., Ltd. All rights reserved.
+    </div>
+</body>
+</html>

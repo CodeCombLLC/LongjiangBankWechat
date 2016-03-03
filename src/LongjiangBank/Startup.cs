@@ -16,6 +16,8 @@ namespace LongjiangBank
     {
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddConfiguration();
+
             services.AddMvc();
 
             services.AddEntityFramework()
@@ -31,6 +33,7 @@ namespace LongjiangBank
             logger.MinimumLevel = LogLevel.Debug;
             logger.AddConsole();
 
+            app.UseAutoAjax();
             app.UseSession();
             app.UseStaticFiles();
             app.UseIISPlatformHandler();

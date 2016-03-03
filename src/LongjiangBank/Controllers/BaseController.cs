@@ -14,6 +14,15 @@ namespace LongjiangBank.Controllers
 
         public Customer Customer { get { return customer; } }
 
+        [NonAction]
+        protected IActionResult _Prompt(Action<Prompt> setupPrompt)
+        {
+            var prompt = new Prompt();
+            setupPrompt(prompt);
+            Response.StatusCode = prompt.StatusCode;
+            return View("_Prompt", prompt);
+        }
+
         public override void Prepare()
         {
             base.Prepare();

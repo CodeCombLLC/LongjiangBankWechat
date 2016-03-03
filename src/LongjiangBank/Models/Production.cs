@@ -16,5 +16,9 @@ namespace LongjiangBank.Models
         public string Description { get; set; }
 
         public long Cost { get; set; }
+
+        public bool IsBan { get; set; }
+
+        public long ExchangeCount { get; set; }
     }
 }

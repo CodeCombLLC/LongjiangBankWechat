@@ -30,6 +30,7 @@ namespace LongjiangBank.Models
             {
                 e.HasIndex(x => x.Title);
                 e.HasIndex(x => x.Cost);
+                e.HasIndex(x => x.IsBan);
             });
 
             builder.Entity<Exchange>(e => 

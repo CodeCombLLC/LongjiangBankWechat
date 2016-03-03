@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - 龙江银行</title>
+    <link href="~/Styles/icons.css" rel="stylesheet" />
+    <link href="~/Styles/datetimepicker.css" rel="stylesheet" />
+    <link href="~/styles/main.css" rel="stylesheet" type="text/css" />
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/ckeditor/ckeditor.js"></script>
+    <script src="~/Scripts/codecomb.cascade-1.0.3.min.js"></script>
+    <script src="~/Scripts/jquery.datetimepicker.js"></script>
+    <script src="~/Scripts/site.js"></script>
+    <!--[if lte IE 7]>
+    <script src="/Scripts/json2.js"></script>
+    <![endif]-->
+    <!--[if lte IE 9]>
+    <script type="text/javascript" src="/Scripts/excanvas.js"></script>
+    <script src="/Scripts/jplaceholder.js"></script>
+    <script src="/Scripts/pie.js"></script>
+    <![endif]-->
+    <!--[if lte IE 6]>
+    <script src="/Scripts/png.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <div class="left-sidebar">
+        <div class="sidebar-subtitle">基本信息管理</div>
+        <a href="/General"><div class="sidebar-menu"><i class="fa fa-star icon ico"></i>站点参数</div></a>
+        <a href="/General/Catalog"><div class="sidebar-menu"><i class="fa fa-tasks icon ico"></i>分类管理</div></a>
+        <a href="/General/Comment"><div class="sidebar-menu"><i class="fa fa-comment icon ico"></i>评论管理</div></a>
+        <a href="/General/Comment?Verify=0"><div class="sidebar-menu"><i class="fa fa-comment icon ico"></i>新评论 (@ViewBag.NewComment)</div></a>
+        <a href="/General/License"><div class="sidebar-menu"><i class="fa fa-file icon ico"></i>服务条款</div></a>
+        <div class="sidebar-subtitle">其它操作</div>
+        <a href="javascript:$('#frmLogout').submit()"><div class="sidebar-menu"><i class="fa fa-sign-out icon ico"></i>退出系统</div></a>
+        @using (Html.BeginForm("Logout", "Shared", null, FormMethod.Post, new { id = "frmLogout" }))
+        {
+            @Html.AntiForgeryToken()
+        }
+    </div>
+    <div class="container">
+        <div class="wrap-cont">
+            @RenderBody()
+            <div class="footer">Copyright © 2016 Code Comb Technology Co., Ltd. All rights reserved.</div>
+        </div>
+    </div>
+    <script>
+        var csrf = $("input[name='__RequestVerificationToken']").val();
+    </script>
+</body>
+</html>

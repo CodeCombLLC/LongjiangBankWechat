@@ -1,0 +1,43 @@
+﻿@{
+    ViewBag.Title = "登录";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - 龙江银行</title>
+    <link href="~/styles/main.css" rel="stylesheet" type="text/css" />    
+    <!--[if lte IE 7]>
+    <script src="/Scripts/json2.js"></script>
+    <![endif]-->
+    <!--[if lte IE 9]>
+    <script type="text/javascript" src="/Scripts/excanvas.js"></script>
+    <script src="/Scripts/jplaceholder.js"></script>
+    <script src="/Scripts/pie.js"></script>
+    <![endif]-->
+    <!--[if lte IE 6]>
+    <script src="/Scripts/png.js"></script>
+    <![endif]-->
+
+</head>
+<body style="background-color:#2a3b52;background-image:none;">
+    <div class="login">
+        @using (Html.BeginForm("Login", "Shared", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <img class="login-logo" src="~/Images/Logo.png" alt="龙江银行" />
+            <h2 class="login-title">登录龙江银行</h2>
+            <input type="text" class="login-textbox" placeholder="用户名" name="Username" />
+            <br /><input type="password" class="login-textbox" placeholder="密码" name="Password" />
+            <input type="submit" value="" class="login-go" />
+        }
+    </div>
+    <div class="clr"></div>
+    <div class="footer">
+        Copyright © 2016 Code Comb Technology Co., Ltd. All rights reserved.
+    </div>
+</body>
+</html>

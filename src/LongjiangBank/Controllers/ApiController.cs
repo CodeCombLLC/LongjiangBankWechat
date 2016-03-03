@@ -95,14 +95,26 @@ namespace LongjiangBank.Controllers
             var fromUsername = xml.GetMidText("<FromUserName><![CDATA[", "]]></FromUserName>");
             var toUsername = xml.GetMidText("<ToUserName><![CDATA[", "]]></ToUserName>");
             var customer = DB.Customers.SingleOrDefault(x => x.Id == fromUsername);
-            var ret = $@"<xml>
+            if (customer == null)
+            {
+                return Content($@"<xml>
+<ToUserName><![CDATA[{fromUsername}]]></ToUserName>
+<FromUserName><![CDATA[{toUsername}]]></FromUserName>
+<CreateTime>{DateTime.Now.ToTimeStamp() / 1000}</CreateTime>
+<MsgType><![CDATA[text]]></MsgType>
+<Content><![CDATA[您当前的积分：0]]></Content>
+</xml> ");
+            }
+            else
+            {
+                return Content($@"<xml>
 <ToUserName><![CDATA[{fromUsername}]]></ToUserName>
 <FromUserName><![CDATA[{toUsername}]]></FromUserName>
 <CreateTime>{DateTime.Now.ToTimeStamp() / 1000}</CreateTime>
 <MsgType><![CDATA[text]]></MsgType>
 <Content><![CDATA[{"您当前的积分：" + customer.Coins}]]></Content>
-</xml> ";
-            return Content(ret);
+</xml> ");
+            }
         }
 
         public IActionResult Shop()
@@ -127,6 +139,15 @@ namespace LongjiangBank.Controllers
 </Articles>
 </xml> ";
             return Content(ret);
+        }
+
+        public IActionResult Mall(string title)
+        {
+            var ret = DB.Productions.Where(x => !x.IsBan);
+            if (!string.IsNullOrEmpty(title))
+                ret = ret.Where(x => x.Title.Contains(title) || title.Contains(x.Title));
+            ret = ret.OrderByDescending(x => x.Cost);
+            return AjaxPagedView(ret, "#lstProducts", 10);
         }
     }
 }
