@@ -149,5 +149,23 @@ namespace LongjiangBank.Controllers
             ret = ret.OrderByDescending(x => x.Cost);
             return AjaxPagedView(ret, "#lstProducts", 10);
         }
+
+        public IActionResult Image(Guid id)
+        {
+            var p = DB.Productions.Single(x => x.Id == id);
+            return File(p.Picture, p.ContentType);
+        }
+
+        public IActionResult Production(Guid id)
+        {
+            var p = DB.Productions.Single(x => x.Id == id && !x.IsBan);
+            return View(p);
+        }
+
+        public IActionResult ProductionComment(Guid id)
+        {
+            var p = DB.Productions.Single(x => x.Id == id && !x.IsBan);
+            return View(p);
+        }
     }
 }

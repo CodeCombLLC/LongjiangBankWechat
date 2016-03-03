@@ -565,3 +565,13 @@ img {
 .img-cert {
     width: 480px;
 }
+
+ul {
+    list-style: none;
+    margin: 20px 0;
+    padding: 0;
+}
+
+ul li a {
+    color: #fff;
+}

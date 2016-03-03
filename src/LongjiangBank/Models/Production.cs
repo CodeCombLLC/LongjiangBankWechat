@@ -20,5 +20,9 @@ namespace LongjiangBank.Models
         public bool IsBan { get; set; }
 
         public long ExchangeCount { get; set; }
+
+        public byte[] Picture { get; set; }
+
+        public string ContentType { get; set; }
     }
 }

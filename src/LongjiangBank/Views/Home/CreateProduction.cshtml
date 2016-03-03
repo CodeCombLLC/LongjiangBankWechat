@@ -1,0 +1,31 @@
+﻿@{ 
+    ViewBag.Title = "创建商品";
+}
+<h2>@ViewBag.Title</h2>
+<form asp-action="CreateProduction" asp-controller="Home" enctype="multipart/form-data">
+    <table class="detail-table">
+        <tr>
+            <td class="row-title">标题</td>
+            <td><input type="text" class="w-3 textbox" name="title" /></td>
+        </tr>
+        <tr>
+            <td class="row-title">所需积分</td>
+            <td><input type="text" class="w-3 textbox" name="cost" value="0" /></td>
+        </tr>
+        <tr>
+            <td class="row-title">内容</td>
+            <td><textarea name="description" class="ckeditor"></textarea></td>
+        </tr>
+        <tr>
+            <td class="row-title">下架</td>
+            <td><input type="checkbox" name="isban" value="true" /></td>
+        </tr>
+        <tr>
+            <td class="row-title">商品图片</td>
+            <td><input type="file" name="file" /></td>
+        </tr>
+    </table>
+    <p>
+        <input type="submit" class="btn inverse" value="创建" />
+    </p>
+</form>

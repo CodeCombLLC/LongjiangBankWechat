@@ -1,0 +1,49 @@
+﻿@model IEnumerable<LongjiangBank.Models.Production>
+@{
+    ViewBag.Title = "积分商城商品管理";
+}
+<h2>
+    @ViewBag.Title
+    <a href="/Home/CreateProduction" class="sub-menu-item">添加商品</a>
+</h2>
+<form class="search">
+    检索：
+    <input type="text" name="title" class="textbox w-1" placeholder="商品名称" value="@Context.Request.Query["title"]" />
+    <input type="text" name="gte" class="textbox w-0-8" placeholder="积分(大于)" value="@Context.Request.Query["gte"]" />
+    <input type="text" name="lte" class="textbox w-0-8" placeholder="积分(小于)" value="@Context.Request.Query["lte"]" />
+
+    <select name="isban">
+        <option value="">全部状态</option>
+        <option value="false">接受兑换</option>
+        <option value="true">已经下架</option>
+    </select>
+    <input type="submit" class="btn" value="检索" />
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>商品名</th>
+            <th>所需积分</th>
+            <th>状态</th>
+            <th>兑换人数</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var x in Model)
+        {
+            <tr id="production-@x.Id">
+                <td>@x.Title</td>
+                <td>@x.Cost</td>
+                <td>@(x.IsBan ? "已经下架" : "接受兑换")</td>
+                <td>@x.ExchangeCount</td>
+                <td>
+                    <a href="/Home/EditProduction/@x.Id">编辑</a>
+                    <a href="javascript: deleteDialog('/Home/DeleteProduction/@x.Id', 'production-@x.Id')">删除</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@Html.MakePager()
+<div class="clr"></div>
