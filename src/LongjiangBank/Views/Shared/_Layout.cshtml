@@ -30,6 +30,7 @@
         <a href="/Home/Mall"><div class="sidebar-menu"><i class="fa fa-shopping-cart icon ico"></i>商城管理</div></a>
         <a href="/Home/Verify"><div class="sidebar-menu"><i class="fa fa-star icon ico"></i>积分兑换审核 (@ViewBag.NewCoins)</div></a>
         <a href="/Home/Exchange"><div class="sidebar-menu"><i class="fa fa-exchange icon ico"></i>兑换奖品</div></a>
+        <a href="/Home/Deposit"><div class="sidebar-menu"><i class="fa fa-edit icon ico"></i>单号管理</div></a>
         <div class="sidebar-subtitle">其它操作</div>
         <a href="javascript:$('#frmLogout').submit()"><div class="sidebar-menu"><i class="fa fa-sign-out icon ico"></i>退出系统</div></a>
         @using (Html.BeginForm("Logout", "Home", null, FormMethod.Post, new { id = "frmLogout" }))

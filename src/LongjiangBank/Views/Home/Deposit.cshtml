@@ -1,0 +1,56 @@
+﻿@model IEnumerable<LongjiangBank.Models.Deposit>
+@{ 
+    ViewBag.Title = "单号管理";
+}
+
+<h2>
+    @ViewBag.Title
+    <a href="/Home/CreateDeposit" class="sub-menu-item">录入单号</a>
+</h2>
+
+<form class="search">
+    检索：
+    <input type="text" name="number" class="textbox w-0-8" placeholder="单号" value="@Context.Request.Query["number"]" />
+    <input type="text" name="name" class="textbox w-0-8" placeholder="姓名" value="@Context.Request.Query["name"]" />
+    <input type="text" name="prcid" class="textbox w-2" placeholder="身份证号" value="@Context.Request.Query["prcid"]" />
+    <input type="text" name="begin" class="textbox w-0-8 datetime" placeholder="时间(大于)" value="@Context.Request.Query["begin"]" />
+    <input type="text" name="end" class="textbox w-0-8 datetime" placeholder="时间(小于)" value="@Context.Request.Query["end"]" />
+    <select name="status">
+        <option value="">全部状态</option>
+        @foreach (var x in Enum.GetNames(typeof(LongjiangBank.Models.DepositStatus)))
+        {
+            <!option @(Context.Request.Query["status"] == x ? "selected" : "")>@x</!option>
+        }
+    </select>
+    <input type="submit" class="btn" value="检索" />
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>单号</th>
+            <th>姓名</th>
+            <th>身份证号</th>
+            <th>积分</th>
+            <th>状态</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var x in Model)
+        { 
+            <tr id="deposit-@x.Id">
+                <td>@x.Id</td>
+                <td>@x.Name</td>
+                <td>@x.PRCID</td>
+                <td>@x.Coins</td>
+                <td>@x.Status</td>
+                <td>
+                    <a href="javascript: deleteDialog('/Home/DeleteDeposit/@x.Id', 'deposit-@x.Id')">删除</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@Html.MakePager()
+<div class="clr"></div>

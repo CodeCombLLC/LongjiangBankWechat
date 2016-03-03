@@ -80,7 +80,11 @@ namespace LongjiangBank.Controllers
                 deposit.Status = DepositStatus.兑换中;
                 deposit.SubmitTime = DateTime.Now;
                 DB.SaveChanges();
-                return View("Coins2", deposit);
+                return Prompt(x =>
+                {
+                    x.Title = "兑换信息";
+                    x.Details = $"兑换信息已提交，系统将在24小时内将本次的【{deposit.Coins}点积分】打入您的账号中！";
+                });
             }
 
             return Prompt(x => 

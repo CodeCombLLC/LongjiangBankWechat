@@ -1,0 +1,50 @@
+﻿@model IEnumerable<LongjiangBank.Models.Exchange>
+@{ 
+    ViewBag.Title = "兑换礼品";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<form class="search">
+    身份校验(姓名和身份证号均为必填)：
+    <input type="text" name="name" class="textbox w-2" placeholder="姓名" value="@Context.Request.Query["name"]" />
+    <input type="text" name="prcid" class="textbox w-2" placeholder="身份证号" value="@Context.Request.Query["prcid"]" />
+    <input type="submit" class="btn" value="查询" />
+</form>
+
+@if (!string.IsNullOrEmpty(Context.Request.Query["prcid"]) && !string.IsNullOrEmpty(Context.Request.Query["name"]))
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>商品名称</th>
+                <th>兑换时间</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var x in Model)
+            { 
+                <tr id="exchange-@x.Id">
+                    <td>@x.Production.Title</td>
+                    <td>@x.Time.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                    <td>
+                        <a href="javascript:distribute('@x.Id')">确认兑换</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<script>
+    function distribute(id)
+    {
+        if (confirm("确认为该用户兑换该商品吗？"))
+        {
+            $.post('/home/distribute/' + id, {}, function () {
+                $('#exchange-' + id).remove();
+            });
+        }
+    }
+</script>

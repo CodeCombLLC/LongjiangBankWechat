@@ -16,5 +16,7 @@ namespace LongjiangBank.Models
         public string PRCID { get; set; }
         
         public string Name { get; set; }
+
+        public ICollection<Deposit> Deposits = new List<Deposit>();
     }
 }

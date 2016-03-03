@@ -1,0 +1,50 @@
+﻿@model IEnumerable<LongjiangBank.Models.Deposit>
+@{
+    ViewBag.Title = "积分兑换审核";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>单号</th>
+            <th>兑换积分</th>
+            <th>姓名</th>
+            <th>身份证号</th>
+            <th>兑换时间</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var x in Model)
+        { 
+            <tr id="deposit-@x.Id">
+                <td>@x.Id</td>
+                <td>@x.Coins</td>
+                <td>@x.Name</td>
+                <td>@x.PRCID</td>
+                <td>@x.SubmitTime.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                <td>
+                    <a href="javascript:accept('@x.Id');">同意兑换</a>
+                    <a href="javascript:decline('@x.Id');">拒绝兑换</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@Html.MakePager()
+<div class="clr"></div>
+<script>
+    function accept(id) {
+        $.post('/home/accept/' + id, {}, function () {
+            $('#deposit-' + id).remove();
+        });
+    }
+
+    function decline(id) {
+        $.post('/home/decline/' + id, {}, function () {
+            $('#deposit-' + id).remove();
+        });
+    }
+</script>

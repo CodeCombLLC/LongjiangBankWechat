@@ -1,0 +1,28 @@
+﻿@{ 
+    ViewBag.Title = "创建单号";
+}
+
+<h2>@ViewBag.Title</h2>
+<form asp-action="CreateDeposit" asp-controller="Home" method="post">
+    <table class="detail-table">
+        <tr>
+            <td class="row-title">单号</td>
+            <td><input type="text" class="w-3 textbox" name="id" /></td>
+        </tr>
+        <tr>
+            <td class="row-title">姓名</td>
+            <td><input type="text" class="w-3 textbox" name="name" /></td>
+        </tr>
+        <tr>
+            <td class="row-title">身份证号</td>
+            <td><input type="text" class="w-3 textbox" name="prcid"  /></td>
+        </tr>
+        <tr>
+            <td class="row-title">积分</td>
+            <td><input type="text" class="w-3 textbox" name="name" value="0" /></td>
+        </tr>
+    </table>
+    <p>
+        <input type="submit" class="btn inverse" value="创建" />
+    </p>
+</form>

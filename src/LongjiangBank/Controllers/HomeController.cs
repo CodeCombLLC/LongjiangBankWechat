@@ -95,6 +95,8 @@ namespace LongjiangBank.Controllers
             });
         }
 
+        [AdminRequired]
+        [HttpPost]
         public IActionResult DeleteProduction(Guid id)
         {
             var p = DB.Productions.Single(x => x.Id == id);
@@ -109,6 +111,7 @@ namespace LongjiangBank.Controllers
             return Content("ok");
         }
 
+        [AdminRequired]
         [HttpGet]
         public IActionResult EditProduction(Guid id)
         {
@@ -116,6 +119,7 @@ namespace LongjiangBank.Controllers
             return View(p);
         }
 
+        [AdminRequired]
         [HttpPost]
         public IActionResult EditProduction(Guid id, string title, string description, bool isban, long cost, IFormFile file)
         {
@@ -134,6 +138,99 @@ namespace LongjiangBank.Controllers
             {
                 x.Title = "修改成功";
                 x.Details = $"商品【{title}】的信息已经保存成功！";
+            });
+        }
+
+        [AdminRequired]
+        public IActionResult Verify()
+        {
+            return PagedView(DB.Deposits.Where(x => x.Status == DepositStatus.兑换中));
+        }
+
+        [AdminRequired]
+        [HttpPost]
+        public IActionResult Accept(string id)
+        {
+            var d = DB.Deposits.Single(x => x.Id == id);
+            d.Status = DepositStatus.兑换成功;
+            d.VerifyTime = DateTime.Now;
+            d.Customer.Coins += d.Coins;
+            DB.SaveChanges();
+            return Content("ok");
+        }
+
+        [AdminRequired]
+        [HttpPost]
+        public IActionResult Decline(string id)
+        {
+            var d = DB.Deposits.Single(x => x.Id == id);
+            d.Status = DepositStatus.兑换失败;
+            d.VerifyTime = DateTime.Now;
+            DB.SaveChanges();
+            return Content("ok");
+        }
+
+        [AdminRequired]
+        public IActionResult Exchange(string name, string prcid)
+        {
+            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(prcid))
+                return View();
+            var cust = DB.Customers.Where(x => x.Name == name && x.PRCID == prcid).FirstOrDefault();
+            var exchanges = DB.Exchanges.Where(x => x.CustomerId == cust.Id && !x.IsDistributed).ToList();
+            return View(exchanges);
+        }
+
+        [AdminRequired]
+        [HttpPost]
+        public IActionResult Distribute(Guid id)
+        {
+            var ex = DB.Exchanges.Single(x => x.Id == id);
+            ex.IsDistributed = true;
+            ex.Production.ExchangeCount++;
+            ex.DistributeTime = DateTime.Now;
+            DB.SaveChanges();
+            return Content("ok");
+        }
+
+        [AdminRequired]
+        public IActionResult Deposit(DepositStatus? status, string number, DateTime? begin, DateTime? end, string prcid, string name)
+        {
+            IEnumerable<Deposit> query = DB.Deposits;
+            if (status.HasValue)
+                query = query.Where(x => x.Status == status);
+            if (!string.IsNullOrEmpty(number))
+                query = query.Where(x => x.Id == number);
+            if (begin.HasValue)
+                query = query.Where(x => x.SubmitTime >= begin.Value);
+            if (end.HasValue)
+                query = query.Where(x => x.SubmitTime <= end.Value);
+            if (!string.IsNullOrEmpty(name))
+                query = query.Where(x => x.Name == name);
+            if (!string.IsNullOrEmpty(prcid))
+                query = query.Where(x => x.PRCID == prcid);
+            query = query.OrderByDescending(x => x.SubmitTime);
+            return PagedView(query);
+        }
+
+        [AdminRequired]
+        [HttpGet]
+        public IActionResult CreateDeposit()
+        {
+            return View();
+        }
+
+        [AdminRequired]
+        [HttpPost]
+        public IActionResult CreateDeposit(Deposit deposit)
+        {
+            deposit.CustomerId = null;
+            deposit.SubmitTime = DateTime.Now;
+            deposit.Status = DepositStatus.待兑换;
+            DB.Deposits.Add(deposit);
+            return _Prompt(x =>
+            {
+                x.Title = "创建成功";
+                x.Details = $"单号【{deposit.Id}】创建成功！";
             });
         }
     }

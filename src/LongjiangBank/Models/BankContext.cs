@@ -24,6 +24,9 @@ namespace LongjiangBank.Models
             {
                 e.HasIndex(x => x.SubmitTime);
                 e.HasIndex(x => x.VerifyTime);
+                e.HasOne(x => x.Customer)
+                    .WithMany(x => x.Deposits)
+                    .IsRequired(false);
             });
 
             builder.Entity<Production>(e => 
