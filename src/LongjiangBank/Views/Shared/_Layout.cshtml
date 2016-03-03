@@ -26,12 +26,11 @@
 </head>
 <body>
     <div class="left-sidebar">
-        <div class="sidebar-subtitle">基本信息管理</div>
-        <a href="/General"><div class="sidebar-menu"><i class="fa fa-star icon ico"></i>站点参数</div></a>
-        <a href="/General/Catalog"><div class="sidebar-menu"><i class="fa fa-tasks icon ico"></i>分类管理</div></a>
-        <a href="/General/Comment"><div class="sidebar-menu"><i class="fa fa-comment icon ico"></i>评论管理</div></a>
-        <a href="/General/Comment?Verify=0"><div class="sidebar-menu"><i class="fa fa-comment icon ico"></i>新评论 (@ViewBag.NewComment)</div></a>
-        <a href="/General/License"><div class="sidebar-menu"><i class="fa fa-file icon ico"></i>服务条款</div></a>
+        <div class="sidebar-subtitle">积分管理</div>
+        <a href="/Home"><div class="sidebar-menu"><i class="fa fa-dashboard icon ico"></i>站点参数</div></a>
+        <a href="/Home/Production"><div class="sidebar-menu"><i class="fa fa-shopping-cart icon ico"></i>商城管理</div></a>
+        <a href="/Home/Verify"><div class="sidebar-menu"><i class="fa fa-star icon ico"></i>积分兑换审核 (@ViewBag.NewCoins)</div></a>
+        <a href="/Home/Exchange"><div class="sidebar-menu"><i class="fa fa-exchange icon ico"></i>兑换奖品</div></a>
         <div class="sidebar-subtitle">其它操作</div>
         <a href="javascript:$('#frmLogout').submit()"><div class="sidebar-menu"><i class="fa fa-sign-out icon ico"></i>退出系统</div></a>
         @using (Html.BeginForm("Logout", "Shared", null, FormMethod.Post, new { id = "frmLogout" }))
