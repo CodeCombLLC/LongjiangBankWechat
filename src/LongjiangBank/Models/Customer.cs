@@ -17,6 +17,6 @@ namespace LongjiangBank.Models
         
         public string Name { get; set; }
 
-        public ICollection<Deposit> Deposits = new List<Deposit>();
+        public virtual ICollection<Deposit> Deposits { get; set; } = new List<Deposit>();
     }
 }

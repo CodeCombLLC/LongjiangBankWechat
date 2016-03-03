@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Http;
+using Microsoft.Data.Entity;
 using Microsoft.Extensions.Configuration;
 using LongjiangBank.Models;
 using LongjiangBank.Filters;
@@ -176,7 +177,7 @@ namespace LongjiangBank.Controllers
             if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(prcid))
                 return View();
             var cust = DB.Customers.Where(x => x.Name == name && x.PRCID == prcid).FirstOrDefault();
-            var exchanges = DB.Exchanges.Where(x => x.CustomerId == cust.Id && !x.IsDistributed).ToList();
+            var exchanges = DB.Exchanges.Include(x => x.Production).Where(x => x.CustomerId == cust.Id && !x.IsDistributed).ToList();
             return View(exchanges);
         }
 
@@ -184,7 +185,7 @@ namespace LongjiangBank.Controllers
         [HttpPost]
         public IActionResult Distribute(Guid id)
         {
-            var ex = DB.Exchanges.Single(x => x.Id == id);
+            var ex = DB.Exchanges.Include(x => x.Production).Single(x => x.Id == id);
             ex.IsDistributed = true;
             ex.Production.ExchangeCount++;
             ex.DistributeTime = DateTime.Now;
@@ -227,11 +228,22 @@ namespace LongjiangBank.Controllers
             deposit.SubmitTime = DateTime.Now;
             deposit.Status = DepositStatus.待兑换;
             DB.Deposits.Add(deposit);
+            DB.SaveChanges();
             return _Prompt(x =>
             {
                 x.Title = "创建成功";
                 x.Details = $"单号【{deposit.Id}】创建成功！";
             });
+        }
+
+        [AdminRequired]
+        [HttpPost]
+        public IActionResult DeleteDeposit(string id)
+        {
+            var deposit = DB.Deposits.Single(x => x.Id == id);
+            DB.Deposits.Remove(deposit);
+            DB.SaveChanges();
+            return Content("ok");
         }
     }
 }

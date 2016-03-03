@@ -208,12 +208,13 @@ namespace LongjiangBank.Controllers
                 });
             var cust = DB.Customers.Single(x => x.Id == Customer.Id);
             cust.Coins -= p.Cost;
-            DB.Exchanges.Add(new Models.Exchange
+            DB.Exchanges.Add(new Exchange
             {
                 ProductionId = p.Id,
                 Time = DateTime.Now,
                 IsDistributed = false,
-                DistributeTime = null
+                DistributeTime = null,
+                CustomerId = cust.Id
             });
             DB.SaveChanges();
             return Prompt(x =>
