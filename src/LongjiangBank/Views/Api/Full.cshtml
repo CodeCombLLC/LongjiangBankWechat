@@ -1,7 +1,7 @@
-﻿@{ 
+﻿@{
     Layout = null;
 }
-@model Prompt
+@model LongjiangBank.Models.Customer
 <html>
 <head>
     <meta charset="utf-8" />
@@ -17,10 +17,9 @@
         <table>
             <tr>
                 <td style="width: 2.5em; text-align: left;padding-left: 1em;">
-                    <a href="javascript: history.go(-1);"><i class="fa icon fa-chevron-left"></i></a>
                     &nbsp;
                 </td>
-                <td style="text-align: center">积分商城</td>
+                <td style="text-align: center">完善个人信息</td>
                 <td style="width: 2.5em; text-align: right;padding-right:1em;text-overflow:ellipsis;">
                     &nbsp;
                     <a href="javascript: location.reload() "><i class="fa icon fa-repeat"></i></a>
@@ -29,13 +28,17 @@
         </table>
     </div>
 
-    <div class="wrap-cont">
-        <form class="search">
-            <input type="text" name="title" class="textbox" value="@Context.Request.Query["title"]" id="txtProductTitle" placeholder="搜索商品" />
-            <a href="javascript:$('form').submit();"><i class="fa fa-search" style="color: orange;float:right;font-size:1.4em"></i></a>
-        </form>
-        <div id="lstProducts"></div>
-        @Html.MakePager()
-    </div>
+    <form class="wrap-cont" asp-action="Full" asp-controller="Api" method="post">
+        <div class="textbox-outer">
+            <input type="text" name="name" placeholder="姓名" class="textbox" value="@Model.Name" />
+        </div>
+        <div class="textbox-outer">
+            <input type="text" name="prcid" placeholder="身份证号" class="textbox" value="@Model.PRCID" />
+        </div>
+        <div class="list-outer">请确保填写的信息与银行预留一致，否则无法进行兑换积分、奖品等操作！</div>
+        <a href="javascript: $('form').submit();">
+            <div class="btn">保存</div>
+        </a>
+    </form>
 </body>
 </html>

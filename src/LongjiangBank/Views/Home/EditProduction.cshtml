@@ -1,0 +1,33 @@
+﻿@model LongjiangBank.Models.Production
+@{ 
+    ViewBag.Title = "创建商品";
+}
+<h2>@ViewBag.Title</h2>
+<form asp-action="EditProduction" asp-controller="Home" asp-route-id="@Model.Id" enctype="multipart/form-data">
+    <table class="detail-table">
+        <tr>
+            <td class="row-title">标题</td>
+            <td><input type="text" class="w-3 textbox" asp-for="Title" /></td>
+        </tr>
+        <tr>
+            <td class="row-title">所需积分</td>
+            <td><input type="text" class="w-3 textbox" asp-for="Cost" /></td>
+        </tr>
+        <tr>
+            <td class="row-title">内容</td>
+            <td><textarea asp-for="Description" class="ckeditor"></textarea></td>
+        </tr>
+        <tr>
+            <td class="row-title">下架</td>
+            <td><input type="checkbox" name="isban" asp-for="IsBan" value="true" /></td>
+        </tr>
+        <tr>
+            <td class="row-title">商品图片</td>
+            <td>
+                <img src="/Api/Image/@Model.Id" /><input type="file" name="file" /></td>
+        </tr>
+    </table>
+    <p>
+        <input type="submit" class="btn inverse" value="修改" />
+    </p>
+</form>

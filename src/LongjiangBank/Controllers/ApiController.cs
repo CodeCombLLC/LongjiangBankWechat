@@ -49,6 +49,9 @@ namespace LongjiangBank.Controllers
                 DB.SaveChanges();
             }
             HttpContext.Session.SetString("uid", uid);
+            var cust = DB.Customers.Single(x => x.Id == uid);
+            if (string.IsNullOrEmpty(cust.PRCID) || string.IsNullOrEmpty(cust.Name))
+                return RedirectToAction("Full", "Api");
             return View();
         }
 
@@ -141,8 +144,23 @@ namespace LongjiangBank.Controllers
             return Content(ret);
         }
 
-        public IActionResult Mall(string title)
+        public IActionResult Mall(string uid, string title)
         {
+            if (!Request.Query.ContainsKey("raw"))
+            {
+                if (!string.IsNullOrEmpty(uid) && DB.Customers.Where(x => x.Id == uid).Count() == 0)
+                {
+                    var customer = new Customer
+                    {
+                        Id = uid,
+                        Coins = 0
+                    };
+                    DB.Customers.Add(customer);
+                    DB.SaveChanges();
+                }
+                if (!string.IsNullOrEmpty(uid))
+                    HttpContext.Session.SetString("uid", uid);
+            }
             var ret = DB.Productions.Where(x => !x.IsBan);
             if (!string.IsNullOrEmpty(title))
                 ret = ret.Where(x => x.Title.Contains(title) || title.Contains(x.Title));
@@ -166,6 +184,66 @@ namespace LongjiangBank.Controllers
         {
             var p = DB.Productions.Single(x => x.Id == id && !x.IsBan);
             return View(p);
+        }
+
+        [HttpPost]
+        public IActionResult Exchange(Guid id)
+        {
+            var p = DB.Productions.SingleOrDefault(x => x.Id == id && !x.IsBan);
+            if (p == null)
+                return Prompt(x =>
+                {
+                    x.Title = "兑换失败";
+                    x.Details = "没有找到该商品，或该商品已经下架，请返回积分商城重新选择！";
+                });
+            if (Customer.Coins < p.Cost)
+                return Prompt(x =>
+                {
+                    x.Title = "兑换失败";
+                    x.Details = $"兑换该商品需要{p.Cost}点积分，您当前只有{Customer.Coins}点积分，无法兑换该商品！";
+                });
+            var cust = DB.Customers.Single(x => x.Id == Customer.Id);
+            cust.Coins -= p.Cost;
+            DB.Exchanges.Add(new Models.Exchange
+            {
+                ProductionId = p.Id,
+                Time = DateTime.Now,
+                IsDistributed = false,
+                DistributeTime = null
+            });
+            DB.SaveChanges();
+            return Prompt(x =>
+            {
+                x.Title = "兑换成功";
+                x.Details = $"您成功兑换了一件【{p.Title}】，请到银行柜台向工作人员提供您的姓名及身份证号码以兑换该礼品！";
+            });
+        }
+
+        [HttpGet]
+        public IActionResult Full()
+        {
+            return View(Customer);
+        }
+
+        [HttpPost]
+        public IActionResult Full(string prcid, string name)
+        {
+            if (prcid.Length != 18 && prcid.Length != 15)
+                return Prompt(x =>
+                {
+                    x.Title = "提交失败";
+                    x.Details = "您填写的身份证号信息不合法，请检查后再试";
+                });
+            if (string.IsNullOrEmpty(name))
+                return Prompt(x =>
+                {
+                    x.Title = "提交失败";
+                    x.Details = "您填写的姓名不合法，请检查后再试";
+                });
+            Customer.Name = name;
+            Customer.PRCID = prcid;
+            DB.SaveChanges();
+            return RedirectToAction("Coins", "Api", new { uid = Customer.Id });
         }
     }
 }

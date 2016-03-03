@@ -38,6 +38,9 @@
         <div class="list-outer">
             @(new HtmlString(Model.Description))
         </div>
+        <div class="list-outer">
+            <div class="field">所需积分</div>@Model.Cost
+        </div>
         <a href="javascript: exchange('@Model.Id')">
             <div class="btn">兑换该商品</div>
         </a>

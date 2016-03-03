@@ -81,14 +81,59 @@ namespace LongjiangBank.Controllers
         public IActionResult CreateProduction(Production production, IFormFile file)
         {
             production.ExchangeCount = 0;
-            production.Picture = file.ReadAllBytes();
-            production.ContentType = file.ContentType;
+            if (file != null)
+            {
+                production.Picture = file.ReadAllBytes();
+                production.ContentType = file.ContentType;
+            }
             DB.Productions.Add(production);
             DB.SaveChanges();
             return _Prompt(x =>
             {
                 x.Title = "创建成功";
                 x.Details = $"商品【{production.Title}】已经成功创建！";
+            });
+        }
+
+        public IActionResult DeleteProduction(Guid id)
+        {
+            var p = DB.Productions.Single(x => x.Id == id);
+            var pending = DB.Exchanges.Where(x => x.ProductionId == id && !x.IsDistributed).ToList();
+            foreach (var x in pending)
+            {
+                x.Customer.Coins += p.Cost;
+                DB.Exchanges.Remove(x);
+            }
+            DB.Productions.Remove(p);
+            DB.SaveChanges();
+            return Content("ok");
+        }
+
+        [HttpGet]
+        public IActionResult EditProduction(Guid id)
+        {
+            var p = DB.Productions.Single(x => x.Id == id);
+            return View(p);
+        }
+
+        [HttpPost]
+        public IActionResult EditProduction(Guid id, string title, string description, bool isban, long cost, IFormFile file)
+        {
+            var p = DB.Productions.Single(x => x.Id == id);
+            p.Title = title;
+            p.IsBan = isban;
+            p.Cost = cost;
+            p.Description = description;
+            if (file != null)
+            {
+                p.Picture = file.ReadAllBytes();
+                p.ContentType = file.ContentType;
+            }
+            DB.SaveChanges();
+            return _Prompt(x =>
+            {
+                x.Title = "修改成功";
+                x.Details = $"商品【{title}】的信息已经保存成功！";
             });
         }
     }

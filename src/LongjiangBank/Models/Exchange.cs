@@ -20,5 +20,10 @@ namespace LongjiangBank.Models
         public bool IsDistributed { get; set; }
 
         public DateTime? DistributeTime { get; set; }
+
+        [ForeignKey("Customer")]
+        public string CustomerId { get; set; }
+        
+        public Customer Customer { get; set; }
     }
 }
