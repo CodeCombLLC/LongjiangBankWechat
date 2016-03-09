@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Mvc;
+using Microsoft.Data.Entity;
 using LongjiangBank.Models;
 
 namespace LongjiangBank.Controllers
@@ -75,23 +76,51 @@ namespace LongjiangBank.Controllers
                     && x.Status == DepositStatus.待兑换)
                 .Count() > 0)
             {
-                var deposit = DB.Deposits.SingleOrDefault(x => x.Id == number);
-                deposit.CustomerId = Customer.Id;
-                deposit.Status = DepositStatus.兑换中;
-                deposit.SubmitTime = DateTime.Now;
+
+                var d = DB.Deposits
+                    .Include(x => x.Customer)
+                    .SingleOrDefault(x => x.Id == number);
+                d.CustomerId = Customer.Id;
+                d.Status = DepositStatus.兑换成功;
+                d.VerifyTime = DateTime.Now;
+                d.Customer.Coins += d.Coins;
                 DB.SaveChanges();
                 return Prompt(x =>
                 {
                     x.Title = "兑换信息";
-                    x.Details = $"兑换信息已提交，系统将在24小时内将本次的【{deposit.Coins}点积分】打入您的账号中！";
+                    x.Details = $"您已经成功兑换了【{d.Coins}点积分】，您可以在微信平台中点击查询积分查询当前累积的积分总额！";
                 });
             }
 
+            if (DB.Deposits
+                .Where(x => x.Id == number)
+                .Count() > 0)
+                return Prompt(x =>
+                {
+                    x.Title = "兑换失败";
+                    x.Details = "您无权兑换这个存单号或理财号！如有疑问请联系我们的工作人员核实。";
+                });
+
+            var deposit = new Deposit
+            {
+                Id = number,
+                Status = DepositStatus.审核中,
+                Name = Customer.Name,
+                PRCID = Customer.PRCID,
+                SubmitTime = DateTime.Now,
+                Coins = 0,
+                CustomerId = Customer.Id,
+                VerifyTime = null,
+                Hint = ""
+            };
+            DB.Deposits.Add(deposit);
+            DB.SaveChanges();
+
             return Prompt(x => 
             {
-                x.Title = "兑换失败";
+                x.Title = "兑换信息";
                 x.StatusCode = 403;
-                x.Details = "兑换失败，您没有资格兑换本张存单或财务编号！";
+                x.Details = "兑换信息已经提交，我们的工作人员会在24小时内处理您的兑换请求！";
             });
         }
 

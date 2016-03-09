@@ -145,17 +145,20 @@ namespace LongjiangBank.Controllers
         [AdminRequired]
         public IActionResult Verify()
         {
-            return PagedView(DB.Deposits.Where(x => x.Status == DepositStatus.兑换中));
+            return PagedView(DB.Deposits.Where(x => x.Status == DepositStatus.审核中));
         }
 
         [AdminRequired]
         [HttpPost]
-        public IActionResult Accept(string id)
+        public IActionResult Accept(string id, long coins)
         {
-            var d = DB.Deposits.Single(x => x.Id == id);
+            var d = DB.Deposits
+                .Include(x => x.Customer)
+                .Single(x => x.Id == id);
             d.Status = DepositStatus.兑换成功;
             d.VerifyTime = DateTime.Now;
-            d.Customer.Coins += d.Coins;
+            d.Coins = coins;
+            d.Customer.Coins += coins;
             DB.SaveChanges();
             return Content("ok");
         }
@@ -165,9 +168,7 @@ namespace LongjiangBank.Controllers
         public IActionResult Decline(string id)
         {
             var d = DB.Deposits.Single(x => x.Id == id);
-            d.Status = DepositStatus.兑换失败;
-            d.VerifyTime = DateTime.Now;
-            DB.SaveChanges();
+            DB.Deposits.Remove(d);
             return Content("ok");
         }
 
@@ -224,6 +225,12 @@ namespace LongjiangBank.Controllers
         [HttpPost]
         public IActionResult CreateDeposit(Deposit deposit)
         {
+            if (DB.Deposits.Where(x => x.Id == deposit.Id).Count() > 0)
+                return _Prompt(x => 
+                {
+                    x.Title = "提示信息";
+                    x.Details = $"系统中已经存在存单【{deposit.Id}】。请勿重复添加！";
+                });
             deposit.CustomerId = null;
             deposit.SubmitTime = DateTime.Now;
             deposit.Status = DepositStatus.待兑换;

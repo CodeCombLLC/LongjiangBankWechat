@@ -26,7 +26,9 @@
                 <td>@x.PRCID</td>
                 <td>@x.SubmitTime.ToString("yyyy-MM-dd HH:mm:ss")</td>
                 <td>
+                    <input type="text" class="textbox w-0-6 txt-coins" value="0" />
                     <a href="javascript:accept('@x.Id');">同意兑换</a>
+
                     <a href="javascript:decline('@x.Id');">拒绝兑换</a>
                 </td>
             </tr>
@@ -37,7 +39,7 @@
 <div class="clr"></div>
 <script>
     function accept(id) {
-        $.post('/home/accept/' + id, {}, function () {
+        $.post('/home/accept/' + id, { coins: $('#deposit-' + id + ' .txt-coins').val() }, function () {
             $('#deposit-' + id).remove();
         });
     }

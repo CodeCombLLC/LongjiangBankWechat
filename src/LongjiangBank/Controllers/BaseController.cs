@@ -33,7 +33,7 @@ namespace LongjiangBank.Controllers
                 customer = DB.Customers.Where(x => x.Id == uid).SingleOrDefault();
             }
 
-            ViewBag.NewCoins = DB.Deposits.Where(x => x.Status == DepositStatus.兑换中).Count();
+            ViewBag.NewCoins = DB.Deposits.Where(x => x.Status == DepositStatus.审核中).Count();
         }
     }
 }

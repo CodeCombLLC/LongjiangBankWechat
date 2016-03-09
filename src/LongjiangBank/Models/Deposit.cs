@@ -10,7 +10,7 @@ namespace LongjiangBank.Models
     public enum DepositStatus
     {
         待兑换,
-        兑换中,
+        审核中,
         兑换失败,
         兑换成功
     }
