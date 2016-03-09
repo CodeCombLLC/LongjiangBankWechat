@@ -21,14 +21,14 @@
         { 
             <tr id="deposit-@x.Id">
                 <td>@x.Id</td>
-                <td>@x.Coins</td>
+                <td>
+                    <input type="text" class="textbox w-0-6 txt-coins" value="0" />
+                </td>
                 <td>@x.Name</td>
                 <td>@x.PRCID</td>
                 <td>@x.SubmitTime.ToString("yyyy-MM-dd HH:mm:ss")</td>
                 <td>
-                    <input type="text" class="textbox w-0-6 txt-coins" value="0" />
                     <a href="javascript:accept('@x.Id');">同意兑换</a>
-
                     <a href="javascript:decline('@x.Id');">拒绝兑换</a>
                 </td>
             </tr>
