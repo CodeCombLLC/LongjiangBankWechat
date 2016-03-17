@@ -195,7 +195,7 @@ namespace LongjiangBank.Controllers
         }
 
         [AdminRequired]
-        public IActionResult Deposit(DepositStatus? status, string number, DateTime? begin, DateTime? end, string prcid, string name)
+        public IActionResult Deposit(DepositStatus? status, string number, DateTime? begin, DateTime? end, string prcid, string name, bool? raw)
         {
             IEnumerable<Deposit> query = DB.Deposits;
             if (status.HasValue)
@@ -211,7 +211,14 @@ namespace LongjiangBank.Controllers
             if (!string.IsNullOrEmpty(prcid))
                 query = query.Where(x => x.PRCID == prcid);
             query = query.OrderByDescending(x => x.SubmitTime);
-            return PagedView(query);
+            if (raw.HasValue && raw.Value)
+            {
+                return XlsView(query.ToList(),"deposit.xls", "Excel");
+            }
+            else
+            {
+                return PagedView(query);
+            }
         }
 
         [AdminRequired]

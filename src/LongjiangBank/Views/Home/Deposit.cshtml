@@ -10,6 +10,7 @@
 
 <form class="search">
     检索：
+    <input type="hidden" name="raw" id="raw" />
     <input type="text" name="number" class="textbox w-0-8" placeholder="单号" value="@Context.Request.Query["number"]" />
     <input type="text" name="name" class="textbox w-0-8" placeholder="姓名" value="@Context.Request.Query["name"]" />
     <input type="text" name="prcid" class="textbox w-2" placeholder="身份证号" value="@Context.Request.Query["prcid"]" />
@@ -22,7 +23,8 @@
             <!option @(Context.Request.Query["status"] == x ? "selected" : "")>@x</!option>
         }
     </select>
-    <input type="submit" class="btn" value="检索" />
+    <input type="submit" id="btnSubmit" class="btn" value="检索" />
+    <input type="button" id="btnExport" class="btn" value="导出" />
 </form>
 
 <table class="table">
@@ -54,3 +56,12 @@
 </table>
 @Html.MakePager()
 <div class="clr"></div>
+<script>
+    $('#btnExport').click(function () {
+        $('#raw').val('true');
+        $('.search').submit();
+    });
+    $('#btnSubmit').click(function () {
+        $('#raw').val('false');
+    });
+</script>
