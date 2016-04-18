@@ -32,6 +32,9 @@ namespace LongjiangBank.Models
 
         public DateTime? VerifyTime { get; set; }
 
+        [MaxLength(32)]
+        public string Phone { get; set; }
+
         public string Hint { get; set; }
 
         public long Coins { get; set; }

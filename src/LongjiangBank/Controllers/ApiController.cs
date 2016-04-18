@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Data.Entity;
+using System.Text.RegularExpressions;
 using LongjiangBank.Models;
 
 namespace LongjiangBank.Controllers
@@ -59,7 +60,8 @@ namespace LongjiangBank.Controllers
         [HttpPost]
         public IActionResult Coins(string number, string uid)
         {
-            if (string.IsNullOrEmpty(number))
+            var regex = new Regex("[a-zA-Z0-9]{0,}");
+            if (string.IsNullOrEmpty(number) || number.Length > 30 || !regex.IsMatch(number))
             {
                 return Prompt(x =>
                 {
@@ -111,6 +113,7 @@ namespace LongjiangBank.Controllers
                 Coins = 0,
                 CustomerId = Customer.Id,
                 VerifyTime = null,
+                Phone = Customer.Phone,
                 Hint = ""
             };
             DB.Deposits.Add(deposit);
@@ -260,7 +263,7 @@ namespace LongjiangBank.Controllers
         }
 
         [HttpPost]
-        public IActionResult Full(string prcid, string name)
+        public IActionResult Full(string prcid, string name, string phone)
         {
             if (prcid.Length != 18 && prcid.Length != 15)
                 return Prompt(x =>
@@ -276,6 +279,7 @@ namespace LongjiangBank.Controllers
                 });
             Customer.Name = name;
             Customer.PRCID = prcid;
+            Customer.Phone = phone;
             DB.SaveChanges();
             return RedirectToAction("Coins", "Api", new { uid = Customer.Id });
         }

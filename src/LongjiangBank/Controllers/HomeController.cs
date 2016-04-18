@@ -6,6 +6,7 @@ using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Http;
 using Microsoft.Data.Entity;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.PlatformAbstractions;
 using LongjiangBank.Models;
 using LongjiangBank.Filters;
 
@@ -258,6 +259,39 @@ namespace LongjiangBank.Controllers
             DB.Deposits.Remove(deposit);
             DB.SaveChanges();
             return Content("ok");
+        }
+
+        [HttpGet]
+        public IActionResult Password()
+        {
+            return View();
+        }
+
+        public IActionResult Password(string old, string @new, string confirm, [FromServices]IConfiguration Config,[FromServices]IApplicationEnvironment env)
+        {
+            if (@new != confirm)
+                return _Prompt(x =>
+                {
+                    x.Title = "修改失败";
+                    x.Details = "两次密码输入不一致！";
+                    x.StatusCode = 400;
+                });
+
+            if (Config["Password"] != old)
+                return _Prompt(x =>
+                {
+                    x.Title = "修改失败";
+                    x.Details = "旧密码不正确！";
+                    x.StatusCode = 400;
+                });
+
+            var str = "{ \"Username\":\"admin\", \"Password\":\"" + @new + "\" }";
+            System.IO.File.WriteAllText(System.IO.Path.Combine(env.ApplicationBasePath, "config.json"), str);
+            return _Prompt(x =>
+            {
+                x.Title = "修改成功";
+                x.Details = "新密码已生效！";
+            });
         }
     }
 }

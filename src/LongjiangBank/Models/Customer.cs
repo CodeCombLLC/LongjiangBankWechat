@@ -14,8 +14,10 @@ namespace LongjiangBank.Models
         public long Coins { get; set; }
 
         public string PRCID { get; set; }
-        
+
         public string Name { get; set; }
+
+        public string Phone { get; set; }
 
         public virtual ICollection<Deposit> Deposits { get; set; } = new List<Deposit>();
     }
