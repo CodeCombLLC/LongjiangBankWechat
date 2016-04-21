@@ -1,0 +1,17 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MainActivity">
+    <item
+        android:title="返回"
+        android:id="@+id/action_back"
+        android:orderInCategory="100"
+        android:actionLayout="@android:color/white"
+        app:showAsAction="always" />
+
+    <item
+        android:title="回到主页"
+        android:id="@+id/action_back_home"
+        android:orderInCategory="100"
+        app:showAsAction="always" />
+</menu>

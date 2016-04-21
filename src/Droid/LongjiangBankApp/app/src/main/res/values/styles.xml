@@ -1,0 +1,25 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+    <item name="android:background" >@android:color/white</item>        
+    </style>
+
+    <style name="MyAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <!-- Used for the buttons -->
+        <item name="colorAccent">#FFC107</item>
+        <!-- Used for the title and text -->
+        <item name="android:textColorPrimary">@android:color/darker_gray</item>
+        <!-- Used for the background -->
+        <item name="android:background">#FFFFFF</item>
+    </style>
+
+    
+        <style name="PopupAnimation" parent="android:Animation">
+            <item name="android:windowEnterAnimation">@anim/popup_enter</item>
+            <item name="android:windowExitAnimation">@anim/popup_exit</item>
+        </style>
+ 
+
+</resources>
