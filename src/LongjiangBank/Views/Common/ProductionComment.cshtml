@@ -1,0 +1,73 @@
+﻿@model LongjiangBank.Models.Production
+@{
+    Layout = null;
+}
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>积分商城</title>
+    <link href="~/styles/site.css" rel="stylesheet" type="text/css" />
+    <link href="~/styles/icons.css" rel="stylesheet" type="text/css" />
+    <script src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+    <script src="~/scripts/jquery.autoajax.js"></script>
+</head>
+<body>
+    <div class="header">
+        <table>
+            <tr>
+                <td style="width: 2.5em; text-align: left;padding-left: 1em;">
+                    <a href="javascript: history.go(-1);"><i class="fa icon fa-chevron-left"></i></a>
+                    &nbsp;
+                </td>
+                <td style="text-align: center">@Model.Title</td>
+                <td style="width: 2.5em; text-align: right;padding-right:1em;text-overflow:ellipsis;">
+                    &nbsp;
+                    <a href="javascript: location.reload() "><i class="fa icon fa-repeat"></i></a>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="wrap-cont">
+        <img src="/Api/Image/@Model.Id" alt="商品图片展示" id="product-img" />
+        <div class="sort-bar">
+            <a href="/Common/Production/@Model.Id" class="sort">商品详情</a>
+            <a href="/Common/ProductionComment/@Model.Id" class="sort">商品评价</a>
+        </div>
+        <div class="list-outer">
+            <!-- 多说评论框 start -->
+            <div class="ds-thread" data-thread-key="@Model.Id" data-title="@Model.Title" data-url="@Context.Request.Path"></div>
+            <!-- 多说评论框 end -->
+            <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+            <script type="text/javascript">
+var duoshuoQuery = {short_name:"longjiangyinhang"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0]
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+            </script>
+            <!-- 多说公共JS代码 end -->
+        </div>
+        <a href="javascript: exchange('@Model.Id')">
+            <div class="btn">兑换该商品</div>
+        </a>
+    </div>
+
+    <form asp-action="Exchange" asp-controller="Api" asp-route-id="@Model.Id" id="frmExchange"></form>
+    <script>
+        function exchange(id)
+        {
+            if (confirm('是否确认兑换该商品?'))
+            {
+                $('#frmExchange').submit();
+            }
+        }
+    </script>
+    @Html.Partial("~/Views/Common/_TabBar.cshtml")
+</body>
+</html>

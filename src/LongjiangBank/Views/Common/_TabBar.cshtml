@@ -1,0 +1,26 @@
+﻿<table class="tab-bar">
+    <tbody>
+        <tr>
+            <td>
+                <a asp-action="Index" asp-controller="Common" data-performance="tab" class="tab-block @(ViewContext.RouteData.Values["action"].ToString() == "Index" ? "tab-active" : "")">
+                    <i class="fa tab-icon fa-sign-in"></i><br /><span class="tab-text">注册</span>
+                </a>
+            </td>
+            <td>
+                <a asp-action="Shop" asp-controller="Common" data-performance="tab" class="tab-block @(new string[] { "Shop", "Production", "ProductionComment" }.Contains(ViewContext.RouteData.Values["action"].ToString()) ? "tab-active" : "")">
+                    <i class="fa tab-icon fa-shopping-cart"></i><br /><span class="tab-text">商城</span>
+                </a>
+            </td>
+            <td>
+                <a asp-action="Coin" asp-controller="Common" data-performance="tab" class="tab-block @(ViewContext.RouteData.Values["action"].ToString() == "Coin" ? "tab-active" : "")">
+                    <i class="fa tab-icon fa-exchange"></i><br /><span class="tab-text">积分兑换</span>
+                </a>
+            </td>
+            <td>
+                <a asp-action="Query" asp-controller="Common" data-performance="tab" class="tab-block @(ViewContext.RouteData.Values["action"].ToString() == "Query" ? "tab-active" : "")">
+                    <i class="fa tab-icon fa-user"></i><br /><span class="tab-text">积分查询</span>
+                </a>
+            </td>
+        </tr>
+    </tbody>
+</table>

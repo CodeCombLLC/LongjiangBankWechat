@@ -26,7 +26,7 @@ namespace LongjiangBank.Controllers
         public override void Prepare()
         {
             base.Prepare();
-
+            ViewBag.IsCommon = false;
             var uid = HttpContext.Session.GetString("uid");
             if (!string.IsNullOrEmpty(uid))
             {

@@ -422,3 +422,42 @@ a {
     box-shadow: 0 0 10px rgb(255, 128, 128);
     behavior:url(/styles/PIE.htc);
 }
+
+.tab-bar {
+    text-align: center;
+    margin: 0;
+    line-height: 0.9em;
+    height: 2.8em;
+    position: fixed;
+    bottom: 0;
+    background-color: rgba(255,255,255,0.95);
+    border-top: 0.08em solid #ddd; 
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+    border-spacing: 0;
+    z-index: 500;
+	transition: transform 0.25s ease;
+}
+
+    .tab-bar a {
+        color: #888;
+        text-decoration: none;
+    }
+
+.tab-icon {
+    font-size: 1.2em!important;
+}
+
+.tab-text {
+    font-size: 0.7em;
+}
+
+.tab-active {
+    color: rgb(23,126,251)!important;
+}
+
+.tab-block {
+    padding-top: 0.2em;
+    display: block;
+}
